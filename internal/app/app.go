@@ -1,7 +1,11 @@
 package app
 
 import (
+	"context"
+
 	"github.com/alonelegion/service_template/internal/app/config"
+	grpc "github.com/alonelegion/service_template/internal/app/grpc/server"
+	http "github.com/alonelegion/service_template/internal/app/http/server"
 	"go.uber.org/zap"
 )
 
@@ -27,4 +31,20 @@ func New(
 		Version:     version,
 		Environment: environment,
 	}
+}
+
+func (app *Application) Run(ctx context.Context) {
+	grpcServerErrCh := grpc.NewServer(ctx, app.logger, app.config)
+	httpServerErrCh := http.NewServer(ctx, app.logger, app.config)
+
+	select {
+	case <-grpcServerErrCh:
+		<-httpServerErrCh
+	case <-httpServerErrCh:
+		<-grpcServerErrCh
+	}
+}
+
+func (app *Application) Shutdown() {
+	_ = app.logger.Sync()
 }
