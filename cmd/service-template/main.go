@@ -1,4 +1,4 @@
-package service_template
+package main
 
 import (
 	"context"
@@ -12,6 +12,7 @@ import (
 
 	application "github.com/alonelegion/service_template/internal/app"
 	ll "github.com/alonelegion/service_template/internal/app/logger"
+	"github.com/alonelegion/service_template/internal/pkg/env"
 )
 
 const (
@@ -56,4 +57,12 @@ func main() {
 		appConfig,
 		logger,
 	)
+
+	ctx = context.WithValue(ctx, env.Name, app.Name)
+	ctx = context.WithValue(ctx, env.Version, app.Version)
+	ctx = context.WithValue(ctx, env.Environment, app.Environment)
+	ctx = context.WithValue(ctx, env.Tags, []string{app.Version, app.Environment})
+
+	app.Run(ctx)
+	app.Shutdown()
 }
