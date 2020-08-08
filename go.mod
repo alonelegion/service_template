@@ -5,6 +5,7 @@ go 1.14
 require (
 	github.com/chapsuk/wait v0.3.1
 	github.com/golang/protobuf v1.4.2
+	github.com/golangci/golangci-lint v1.30.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.0.0
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/jnewmano/grpc-json-proxy v0.0.0-20200427184142-6696b5a3ab05
